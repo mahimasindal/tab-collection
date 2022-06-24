@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- Font Awesome -->
+     <script src="https://kit.fontawesome.com/78c3ab1305.js" crossorigin="anonymous"></script>
+     <style>
+        .main-container{
+            width:300px;
+        }
+        .new-collection{
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        #add-collection:hover{
+            color: rgba(15, 9, 33, 0.74);
+        }
+        hr{
+            background-color: rgb(88, 0, 151);
+            border:1px solid rgb(88, 0, 151);
+        }
+        .each-collection{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:0.8em;
+            border-left:3px white solid
+        }
+        .each-collection:hover{
+        background-color: lavender;
+        border-left:3px rgb(88, 0, 151) solid
+        }
+        .each-collection .icons{
+            display: none;
+        }
+        .each-collection:hover .icons{
+           display: block;
+        }
+        .collection-name{
+            padding:0.5em;
+        }
+        i{
+            margin:0 0.2rem 0 0.2rem;
+            padding: 0.5em;
+        }
+        i:hover{
+            background-color: rgba(86, 212, 189, 0.587);
+            border-radius: 50%;
+
+        }
+
+        .fa-trash:hover{
+            background-color: rgb(250, 138, 138,0.5);
+        }
+
+        #new-collection-form{
+            display: none;
+            -webkit-transition:3s;
+        }
+
+        .floating-label-group {
+        position: relative;
+        margin-top: 20px;
+        margin-bottom: 15px;
+        }
+
+        .form-control{
+            width:205px
+        }
+
+        .floating-label-group .floating-label {
+		font-size: 13px;
+		color: #cccccc;
+		position: absolute;
+		pointer-events: none;
+		top: 2px;
+		left: 12px;
+		transition: all 0.1s ease;
+	}
+
+	.floating-label-group input:focus ~ .floating-label,
+	input:not(:focus):valid ~ .floating-label {
+		top: -15px;
+		bottom: 0px;
+		left: 0px;
+		font-size: 11px;
+		opacity: 1;
+		color: #404040;
+	}
+    .form-row-2{
+        display: grid;
+        align-items: center;
+        grid-template-columns: 1fr 1fr;
+    }
+    .form-row-2 div{
+        display:flex;
+        align-items: center;
+    }
+    .btn-create{
+        border:1px solid rgb(88, 0, 151);
+        border-radius:5px;
+        background-color: rgb(88, 0, 151);
+        color:rgb(255, 213, 0);
+        width:5em;
+        padding:0.5em;
+    }
+    .btn-create:hover{
+        background-color: white;
+        color:rgb(88, 0, 151)
+    }
+
+
+     </style>
+</head>
+<body>
+   <div class="main-container">
+    <div class="new-collection">New Collection <span><i class="fa-solid fa-circle-plus" id="add-collection"></i></span></div>
+    <form id="new-collection-form">
+        <div class="floating-label-group">
+			<input type="text" id="username" class="form-control" autocomplete="off" autofocus required />
+			<label class="floating-label">Collection Name</label>
+		</div>
+        <div class="form-row-2">
+            <div>
+                <label class="floating-label">Current Tab</label>
+                <input type="checkbox"/>
+            </div>
+        <button class="btn-create">Create</button>
+        </div>
+    </form>
+    <hr>
+    <div class="each-collection">
+        <div class="collection-name">Collection1 <i class="fa-solid fa-up-right-from-square"></i></div>
+        <div class="icons">
+        <i class="fa-solid fa-trash"></i>
+        <i class="fa-solid fa-pen"></i>
+        <i class="fa-solid fa-circle-plus add-collection"></i>
+        </div>
+    </div>
+    <div class="each-collection">
+        <div class="collection-name">Collection1 <i class="fa-solid fa-up-right-from-square"></i> </div>
+        <div class="icons">
+        <i class="fa-solid fa-trash"></i>
+        <i class="fa-solid fa-pen"></i>
+        <i class="fa-solid fa-circle-plus add-collection"></i>
+        </div>
+    </div>
+
+
+   </div>
+
+  <script src="./popup.js"></script> 
+    
+</body>
+</html>
