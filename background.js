@@ -15,16 +15,19 @@ console.log("from background")
  //"content-security-policy": "default-src https://kit.fontawesome.com/78c3ab1305.js; child-src 'none'; object-src 'none'"
 
 
- chrome.runtime.onMessage.addListener((request,sender,senderResponse)=>{
+ chrome.runtime.onMessage.addListener((request,sender,sendResponse)=>{
+    //console.log("atleast here", request)
     if(request.message === "insert"){
-        let request = insert_records(request.payload);
+        let request_insert = insert_records(request.payload);
 
-        request.then(res =>{
+        request_insert.then(res =>{
             chrome.runtime.sendMessage({
                 message:"insert_success",
                 payload:res
             })
-        })
+        }).catch(err=>{console.log("err=",err)}
+
+        )
     }
 
     else if(request.message === "get"){
@@ -36,6 +39,7 @@ console.log("from background")
                 payload:res
             })
         })
+        
     }
 
     else if(request.message === "update"){
@@ -61,14 +65,22 @@ console.log("from background")
     }
 
     else if(request.message==="get_all"){
+        //console.log("in get_all_data")
         let request = get_all_records();
 
         request.then(res=>{
+            console.log("got response=",res)
+            /* sendResponse({
+                message:"get_all_success",
+                payload:res
+            }) */
             chrome.runtime.sendMessage({
                 message:"get_all_success",
                 payload:res
             })
-        })
+        }).catch(err=>{console.log("err=",err)}
+
+        )
     }
 
  });
@@ -105,7 +117,7 @@ console.log("from background")
 
     request.onsuccess = function(event){
         db = event.target.result;
-        console.log("DB Opened");
+        console.log("DB Opened = ",db);
         //insert_records(tab_collections);
         db.onerror=function(event){
             console.log("Failed to Open DB")
@@ -135,12 +147,14 @@ console.log("from background")
         return new Promise((resolve,reject)=>{
             insert_transaction.oncomplete=function(){
                 console.log("All Insert Transactions complete")
+                resolve(true)
             }
             insert_transaction.onerror=function(){
                 console.log("Problem inserting records")
+                resolve(false)
             }
     
-            tab_collections.forEach(collection =>{
+            records.forEach(collection =>{
                 let request = objectStore.add(collection);
                 request.onsuccess=function(){
                     console.log("Added: ",collection)
@@ -153,22 +167,25 @@ console.log("from background")
  }
 
 function get_all_records(){
-    if(db){
+       if(db){
         const get_all_transaction=db.transaction("tab_collections","readonly");
         const objectStore = get_all_transaction.objectStore("tab_collections");
 
         return new Promise((resolve,reject)=>{
             get_all_transaction.oncomplete=function(){
-                console.log("All Get Transactiobs complete")
+                console.log("All Get Transactions complete")
             }
-            get_all_transaction.onerror=function(){
+            get_all_transaction.onerror=function(event){
                 console.log("Problem getting records")
+                reject(event.target.result)
             }
     
            let request = objectStore.getAll();
             request.onsuccess=function(event){
-                    console.log(event.target.result);
+                    //console.log(event.target.result);
+                    resolve(event.target.result)
                 }
+               
         })
 
 
@@ -238,5 +255,6 @@ function get_all_records(){
 
  }
 
- create_database()
+create_database()
+//get_all_records()
 
