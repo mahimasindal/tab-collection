@@ -1,3 +1,7 @@
+chrome.runtime.onMessage.addListener((request,sender,senderResponse)=>{
+
+});
+
 let x=document.getElementById('add-collection');
 
 console.log("x=",x)
