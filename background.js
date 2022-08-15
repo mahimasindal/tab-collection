@@ -43,9 +43,9 @@ console.log("from background")
     }
 
     else if(request.message === "update"){
-        let request = update_records(request.payload);
+        let request_update = update_record(request.payload);
 
-        request.then(res =>{
+        request_update.then(res =>{
             chrome.runtime.sendMessage({
                 message:"update_success",
                 payload:res
@@ -54,9 +54,9 @@ console.log("from background")
     }
 
     else if(request.message === "delete"){
-        let request = delete_records(request.payload);
+        let request_delete = delete_record(request.payload);
 
-        request.then(res =>{
+        request_delete.then(res =>{
             chrome.runtime.sendMessage({
                 message:"delete_success",
                 payload:res
@@ -224,10 +224,12 @@ function get_all_records(){
 
         return new Promise((resolve,reject)=>{
             put_transaction.oncomplete=function(){
-                console.log("All PUT Transactiobs complete")
+                console.log("All PUT Transactions complete")
+                resolve(true)
             }
             put_transaction.onerror=function(){
                 console.log("Problem updating records")
+                resolve(false)
             }
     
            let request = objectStore.put(record);
@@ -244,9 +246,11 @@ function get_all_records(){
         return new Promise((resolve,reject)=>{
             delete_transaction.oncomplete=function(){
                 console.log("All Delete Transactiobs complete")
+                resolve(true)
             }
             delete_transaction.onerror=function(){
                 console.log("Problem deleting records")
+                resolve(false)
             }
     
            let request = objectStore.delete(name);

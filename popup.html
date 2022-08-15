@@ -22,6 +22,7 @@
         .new-collection{
             margin-top: 1rem;
             margin-bottom: 1rem;
+    
         }
 
         #add-collection:hover{
@@ -35,7 +36,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding:0.8em;
+            padding:0.5em;
             border-left:3px white solid
         }
         .each-collection:hover{
@@ -50,6 +51,7 @@
         }
         .collection-name{
             padding:0.5em;
+            margin-top:2px;
         }
         i{
             margin:0 0.2rem 0 0.2rem;
@@ -65,10 +67,20 @@
             background-color: rgb(250, 138, 138,0.5);
         }
 
-        #new-collection-form{
-            display: none;
-            -webkit-transition:3s;
+        
+        .new-collection-form-hide{
+           display:none;
+            
         }
+        .new-collection-form-display{
+            display: block;
+  animation: showNav 250ms ease-in-out both;
+        }
+
+        @keyframes showNav {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
 
         .floating-label-group {
         position: relative;
@@ -113,53 +125,147 @@
         border-radius:5px;
         background-color: rgb(88, 0, 151);
         color:rgb(255, 213, 0);
-        width:5em;
+        width:fit-content;
         padding:0.5em;
+        margin:1rem 0 1rem 0;
     }
     .btn-create:hover{
         background-color: white;
-        color:rgb(88, 0, 151)
+        color:rgb(88, 0, 151);
     }
     #temp-node{
         display: none;
     }
+    .fa-xmark{
+        padding: 0.1;
+        position:absolute;
+        top:2px;
+        right:2px;
+        font-size: 1.5em;
+    }
+    .fa-xmark:hover{
+        border-radius: 0px;
+        color:#c00;
+        background-color: transparent;
+    }
+    .modal{
+        max-width: 40ch;
+        border: 0;
+        border-radius: 5px;
+        box-shadow: 0 0 1em rgb(0 0 0 / .3);
+        min-height:60vh;
+    }
+    .modal::backdrop{
+        background:rgba(42, 26, 68, 0.6);
+        opacity: .4;
+    }
+
+    #temp-node-url{
+        display: none;
+    }
+
+    .form-row-1{
+        margin:0.5rem 0 0.5rem 0;
+    }
+    input{
+        background-color: rgb(239, 233, 233);
+        border: 0;
+        border-radius: 0.3em;
+        color: #5a5959;
+        padding: 0.4em;
+    }
+    input:focus{
+        outline: none;
+    }
+    #up-tab-list{
+        max-height:40vh;
+        overflow-y: scroll;
+        -ms-text-combine-horizontal: none;
+    }
+   
 
 
      </style>
 </head>
 <body>
    <div class="main-container">
-    <div class="new-collection">New Collection <span><i class="fa-solid fa-circle-plus" id="add-collection"></i></span></div>
-    <form id="new-collection-form">
-        <div class="floating-label-group">
-			<input type="text" id="c-name" class="form-control" autocomplete="off" autofocus required />
-			<label class="floating-label">Collection Name</label>
-		</div>
-        <div class="form-row-2">
-            <div>
-                <label class="floating-label">Current Tab</label>
-                <input type="radio" name="form-radio" id="cur-tab" checked/>
+    <i class="fa-solid fa-xmark"></i>
+    <div class="new-collection">New Collection 
+        <i class="fa-solid fa-circle-plus" id="add-collection"></i>
+        <form id="new-collection-form" class="new-collection-form-hide">
+            <div class="floating-label-group">
+                <input type="text" id="c-name" class="form-control" autocomplete="off" autofocus required />
+                <label class="floating-label">Collection Name</label>
             </div>
-            <div>
-                <label class="floating-label">All Tabs</label>
-                <input type="radio" name="form-radio" id="all-tabs"/>
+            <div class="form-row-2">
+                <div>
+                    <label class="floating-label">Current Tab</label>
+                    <input type="radio" name="form-radio" id="cur-tab" checked/>
+                </div>
+                <div>
+                    <label class="floating-label">All Tabs</label>
+                    <input type="radio" name="form-radio" id="all-tabs"/>
+                </div>
+            
             </div>
-        
-        </div>
-        <button class="btn-create" id="create-collection">Create</button>
-    </form>
+            <button class="btn-create" id="create-collection">Create</button>
+        </form>
+    </div>
+
+
+    <!-- Collapsible -->
+    
     <hr>
     <div id="collection-list">
         
     </div>
+
+    <!-- for creating nodes of tab collection -->
     <div class="each-collection" id="temp-node">
-        <div class="collection-name"> <i class="fa-solid fa-up-right-from-square"></i></div>
+        <div class="collection-name"> 
+            <i class="fa-solid fa-up-right-from-square" id="open-all-tabs"></i>
+        </div>
         <div class="icons">
-        <i class="fa-solid fa-trash"></i>
-        <i class="fa-solid fa-pen"></i>
-        <i class="fa-solid fa-circle-plus add-collection"></i>
+            <i class="fa-solid fa-trash" id="delete-collection"></i>
+            <i class="fa-solid fa-pen" id="edit-collection"></i>
+            <i class="fa-solid fa-circle-plus add-collection" id="add-current-tab"></i>
         </div>
     </div>
+
+    <!-- for creating nodes of urls -->
+    <div class="each-collection" id="temp-node-url">
+        <a class="collection-name"> 
+        
+        </a>
+        <div class="icons">
+            <i class="fa-solid fa-trash" id="delete-collection"></i>
+            <i class="fa-solid fa-pen" id="edit-collection"></i>
+            <i class="fa-solid fa-circle-plus add-collection" id="add-current-tab"></i>
+        </div>
+    </div>
+
+
+    
+    <dialog class="modal" id="modal">
+        <i class="fa-solid fa-xmark"></i>
+        
+            <div class="new-collection">Update Collection</div>
+            <hr>
+            <form class="form" method="dialog">
+                <div class="form-row-1">
+                    <input id="up-col-name" type="text">
+                    <label>Collection Name</label>
+                </div>
+                <div class="form-row-1">
+                    <input id="up-new-tab" type="text">
+                    <button class="btn-create" style="margin: 0;">Add Link</button>
+                </div>
+                <div id="up-tab-list"></div>
+                <button class="btn-create" type="submit">Update Form</button>
+            </form>
+        
+  
+    </dialog>
 
 
    </div>
